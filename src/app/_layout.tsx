@@ -6,7 +6,14 @@ export default function RootLayout() {
   return (
     <>
       <StatusBar hidden={true} />
-      <Stack>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: {
+            backgroundColor: "#030712",
+          },
+        }}
+      >
         <Stack.Screen
           name="(tabs)"
           options={{

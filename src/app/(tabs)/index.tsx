@@ -1,4 +1,5 @@
 import { useRouter } from "expo-router";
+import { useEffect } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -12,7 +13,7 @@ import SearchBar from "../../../components/SearchBar";
 import TrendingCard from "../../../components/TrendingCard";
 import { icons } from "../../../constants/icons";
 import { images } from "../../../constants/images";
-import fetchMovies from "../../../services/api";
+import { fetchMovies } from "../../../services/api";
 import { getTrendigMovies } from "../../../services/appwrite";
 import useFetch from "../../../services/useFetch";
 import "../globals.css";
@@ -35,10 +36,16 @@ export default function Index() {
       query: "",
     }),
   );
+  useEffect(() => {
+    console.log("Home Mounted");
 
+    return () => {
+      console.log("Home Unmounted");
+    };
+  }, []);
   return (
     <View className="flex-1 bg-primary">
-      <Image source={images.bg} className="w-full absolute  z-0" />
+      <Image source={images.bg} className="w-full h-full absolute z-0" />
 
       <ScrollView
         className="flex-1 px-5"

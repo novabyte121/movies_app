@@ -4,7 +4,7 @@ import MoviesCard from "../../../components/MoviesCard";
 import SearchBar from "../../../components/SearchBar";
 import { icons } from "../../../constants/icons";
 import { images } from "../../../constants/images";
-import fetchMovies from "../../../services/api";
+import { fetchMovies } from "../../../services/api";
 import { updateSearchCounter } from "../../../services/appwrite";
 import useFetch from "../../../services/useFetch";
 
@@ -56,6 +56,7 @@ const Search = () => {
           justifyContent: "center",
           gap: 16,
           marginVertical: 16,
+          // marginBottom: 0,
         }}
         ListHeaderComponent={
           <>
@@ -76,7 +77,7 @@ const Search = () => {
               </Text>
             )}
 
-            {!loading && !error && searchQuery.trim() && movies.length > 0 && (
+            {!loading && !error && searchQuery.trim() && movies?.length > 0 && (
               <Text className="text-xl text-white font-bold mt-5 mb-2">
                 Results of{" "}
                 <Text className="text-indigo-600">{searchQuery}</Text>
@@ -93,6 +94,9 @@ const Search = () => {
             </View>
           ) : null
         }
+        contentContainerStyle={{
+          paddingBottom: 80,
+        }}
       />
     </View>
   );
