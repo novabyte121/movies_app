@@ -66,6 +66,6 @@ export const getTrendigMovies = async (): Promise<TrendingMovie[]> => {
     return result.documents as unknown as TrendingMovie[];
   } catch (error) {
     console.log(error);
-    return undefined;
+    return [];
   }
 };

@@ -24,6 +24,7 @@ const Search = () => {
 
     const timedId = setTimeout(async () => {
       if (searchQuery.trim()) {
+        // Batman 1 => Batman%201
         await loadingMovies();
       } else {
         reset();
@@ -75,7 +76,7 @@ const Search = () => {
               </Text>
             )}
 
-            {!loading && !error && searchQuery.trim() && movies?.length > 0 && (
+            {!loading && !error && searchQuery.trim() && movies.length > 0 && (
               <Text className="text-xl text-white font-bold mt-5 mb-2">
                 Results of{" "}
                 <Text className="text-indigo-600">{searchQuery}</Text>
