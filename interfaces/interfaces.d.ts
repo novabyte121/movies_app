@@ -80,3 +80,9 @@ interface MovieInfoProps {
   label: string;
   value?: string | number | null;
 }
+
+interface SavedMovies {
+  movie_id: number;
+  title: string;
+  poster_url: string;
+}

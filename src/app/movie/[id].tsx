@@ -1,4 +1,5 @@
 import { router, useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -9,7 +10,14 @@ import {
 } from "react-native";
 import { icons } from "../../../constants/icons";
 import { fetchMovieDetails } from "../../../services/api";
+import {
+  deleteSaveMovie,
+  isMovieSaved,
+  saveMovie,
+} from "../../../services/appwrite";
 import useFetch from "../../../services/useFetch";
+
+// Components
 
 const MovieInfo = ({ label, value }: MovieInfoProps) => (
   <View className="flex-col gap-y-2 mt-8">
@@ -18,12 +26,67 @@ const MovieInfo = ({ label, value }: MovieInfoProps) => (
   </View>
 );
 
+interface SaveBtnProps {
+  movie: MovieDetails;
+}
+
+const SaveBtn = ({ movie }: SaveBtnProps) => {
+  const [isSave, setIsSaved] = useState(false);
+
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    const checkSaved = async () => {
+      const saved = await isMovieSaved(movie);
+      setIsSaved(saved);
+    };
+
+    checkSaved();
+  }, [movie]);
+
+  const onClickSavedBtn = async () => {
+    // console.log(movie);
+    if (!movie) return;
+
+    try {
+      setSaving(true);
+
+      const saved = await isMovieSaved(movie);
+
+      if (saved) {
+        await deleteSaveMovie(movie);
+        setIsSaved(false);
+      } else {
+        await saveMovie(movie);
+        setIsSaved(true);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <View>
+      <TouchableOpacity onPress={onClickSavedBtn} disabled={saving}>
+        <Image
+          source={isSave ? icons.saved : icons.save}
+          className="size-7 mr-3"
+        />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 const MoviesDetails = () => {
   const { id } = useLocalSearchParams();
 
-  const { data: movie, loading } = useFetch(() =>
-    fetchMovieDetails(id as string),
-  );
+  const {
+    data: movie,
+    loading,
+    refetch,
+  } = useFetch(() => fetchMovieDetails(id as string));
 
   if (loading || !movie) {
     return (
@@ -48,7 +111,12 @@ const MoviesDetails = () => {
           resizeMode="stretch"
         />
         <View className="flex-col items-start justify-center pt-6 pl-3">
-          <Text className="text-white font-bold text-xl">{movie?.title}</Text>
+          <View className="items-center justify-between flex-row w-full">
+            <Text className="text-white font-bold text-xl ">
+              {movie?.title}
+            </Text>
+            <SaveBtn movie={movie} />
+          </View>
           <View className="flex-row items-center gap-x-5 mt-4">
             <Text className="text-gray-400 font-medium text-sm">
               {movie?.release_date.split("-")[0]}
@@ -68,7 +136,7 @@ const MoviesDetails = () => {
           <MovieInfo label="Overview" value={movie?.overview} />
           <MovieInfo
             label="Genres"
-            value={movie?.genres.map((g) => g.naime).join(" - ")}
+            value={movie?.genres.map((g) => g.name).join(" - ")}
           />
           <View className="flex flex-row justify-between w-1/2">
             <MovieInfo
