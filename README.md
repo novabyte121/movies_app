@@ -8,9 +8,12 @@
 
 <img src="./assets/screenshots/search.jpg" width="300"/>
 
-## Movie Details
+## Movie Details 1
 
 <img src="./assets/screenshots/movie_details.jpg" width="300"/>
+
+## Movie Details 1
+
 <img src="./assets/screenshots/movie_details2.jpg" width="300"/>
 
 ## Saved
